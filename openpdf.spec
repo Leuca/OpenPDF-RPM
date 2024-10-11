@@ -11,7 +11,11 @@ BuildArch:		noarch
 
 ExclusiveArch:	%{java_arches} noarch
 
+%if 0%{?fedora} < 40 || (0%{?rhel} && 0%{?rhel} < 10)
 BuildRequires:	maven-local-openjdk11
+%else
+BuildRequires:	maven-local
+%endif
 BuildRequires:	mvn(org.apache.maven.plugins:maven-source-plugin)
 BuildRequires:	mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:	mvn(org.junit.jupiter:junit-jupiter-api)
