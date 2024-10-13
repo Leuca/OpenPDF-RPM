@@ -34,14 +34,22 @@ OpenPDF is a Java library for creating and editing PDF files with a LGPL and MPL
 
 %package libs
 Summary:		OpenPDF Java library
-Requires:		%{name} = %{version}-%{release}
+# Not automatically generated
+Requires:		mvn(org.junit.jupiter:junit-jupiter-api)
+Requires:		mvn(org.junit.jupiter:junit-jupiter-params)
+Requires:		mvn(org.assertj:assertj-core)
+Requires:		mvn(org.mockito:mockito-core)
+Requires:		mvn(org.hamcrest:hamcrest)
+Requires:		mvn(org.bouncycastle:bcprov-jdk18on)
+Requires:		mvn(org.bouncycastle:bcpkix-jdk18on)
+Requires:		mvn(org.apache.xmlgraphics:fop)
+Requires:		mvn(com.ibm.icu:icu4j)
 
 %description libs
 OpenPDF is a Java library for creating and editing PDF files with a LGPL and MPL open source license.
 
 %package fonts-extra
 Summary:		OpenPDF bundled fonts
-Requires:		%{name}-libs = %{version}-%{release}
 
 %description fonts-extra
 OpenPDF bundled extra fonts (such as Liberation fonts)
@@ -57,7 +65,7 @@ JavaDoc documentation for OpenPDF
 
 %mvn_package ":openpdf" %{name}-libs
 %mvn_package ":openpdf-fonts-extra" %{name}-fonts-extra
-%mvn_package ":openpdf:pom" %{name}
+%mvn_package ":openpdf-parent" %{name}
 
 # We're missing these
 %pom_remove_plugin :nexus-staging-maven-plugin
@@ -69,6 +77,12 @@ JavaDoc documentation for OpenPDF
 %pom_remove_plugin :maven-repository-plugin
 %pom_remove_plugin :pitmp-maven-plugin
 %pom_remove_plugin :maven-failsafe-plugin
+%pom_remove_plugin :maven-bundle-plugin
+%pom_remove_plugin :maven-compiler-plugin
+%pom_remove_plugin :maven-jar-plugin
+%pom_remove_plugin :maven-source-plugin
+%pom_remove_plugin :maven-surefire-plugin
+%pom_remove_plugin :jacoco-maven-plugin
 
 # Disable optional dependency
 %pom_remove_dep org.verapdf:validation-model openpdf/pom.xml
@@ -84,7 +98,7 @@ rm -f openpdf/src/test/java/com/lowagie/text/validation/PDFValidationTest.java
 %install
 %mvn_install
 
-%files -f .mfiles-openpdf-parent
+%files -f .mfiles-openpdf
 %license LICENSE.md
 %doc README.md
 
