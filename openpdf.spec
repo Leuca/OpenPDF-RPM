@@ -1,5 +1,5 @@
 Name:			openpdf
-Version:		1.4.2
+Version:		3.0.0
 Release:		%autorelease
 Summary:		The open source successor of iText
 License:		LGPL 2.1
@@ -11,11 +11,7 @@ BuildArch:		noarch
 
 ExclusiveArch:	%{java_arches} noarch
 
-%if 0%{?fedora} < 40 || (0%{?rhel} && 0%{?rhel} < 10)
-BuildRequires:	maven-local-openjdk11
-%else
 BuildRequires:	maven-local
-%endif
 BuildRequires:	mvn(org.apache.maven.plugins:maven-source-plugin)
 BuildRequires:	mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:	mvn(org.junit.jupiter:junit-jupiter-api)
@@ -68,7 +64,6 @@ JavaDoc documentation for OpenPDF
 %mvn_package ":openpdf-parent" %{name}
 
 # We're missing these
-%pom_remove_plugin :nexus-staging-maven-plugin
 %pom_remove_plugin :maven-javadoc-plugin
 
 # We do not want these to end up in the requirements
@@ -85,15 +80,18 @@ JavaDoc documentation for OpenPDF
 %pom_remove_plugin :jacoco-maven-plugin
 
 # Disable optional dependency
-%pom_remove_dep org.verapdf:validation-model openpdf/pom.xml
-rm -f openpdf/src/test/java/com/lowagie/text/validation/PDFValidationTest.java
+%pom_remove_dep org.verapdf:validation-model openpdf-core/pom.xml
+rm -f openpdf-core/src/test/java/org/openpdf/text/validation/PDFValidationTest.java
 
 # Do not build tools and pdf-swing
 %pom_disable_module pdf-swing
 %pom_disable_module pdf-toolbox
+%pom_disable_module openpdf-kotlin
+%pom_disable_module openpdf-html
+%pom_disable_module openpdf-renderer
 
 %build
-%mvn_build -s -- -Dmaven.compiler.source=9 -Dmaven.compiler.target=9
+%mvn_build -s -- -Dmaven.compiler.source=16 -Dmaven.compiler.target=16
 
 %install
 %mvn_install
@@ -103,7 +101,7 @@ rm -f openpdf/src/test/java/com/lowagie/text/validation/PDFValidationTest.java
 %doc README.md
 
 %files libs -f .mfiles-openpdf-libs
-%license openpdf/src/main/resources/META-INF/LGPL-2.1.md
+%license openpdf-core/src/main/resources/META-INF/LGPL-2.1.md
 
 %files fonts-extra -f .mfiles-openpdf-fonts-extra
 %license openpdf-fonts-extra/src/main/resources/META-INF/LGPL-2.1.md
