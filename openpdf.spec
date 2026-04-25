@@ -1,5 +1,5 @@
 Name:			openpdf
-Version:		3.0.0
+Version:		3.0.3
 Release:		%autorelease
 Summary:		The open source successor of iText
 License:		LGPL 2.1
